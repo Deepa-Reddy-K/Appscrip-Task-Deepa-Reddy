@@ -1,19 +1,21 @@
+// Results.tsx
+import { useEffect, useState } from 'react';
 import useClamp from "@/hooks/useClamp";
 import { Divider, Grid, Select, Typography } from "@mui/material";
 import { ArrowDown2, ArrowLeft2 } from "iconsax-react";
-import { useState } from "react";
 import FilterAccordion from "./FilterAccordion";
 import ProductCard from "./ProductCart";
 
-const product = {
-  title: "Product",
-  image:
-    "https://demo.wpthemego.com/themes/sw_himarket/wp-content/uploads/2016/04/1.jpg",
-};
-
 const Results = () => {
+  const [products, setProducts] = useState<any[]>([]); // Define the type of products explicitly
   const clamp = useClamp();
   const [filtersOpen, setFiltersOpen] = useState(true);
+
+  useEffect(() => {
+    fetch('https://fakestoreapi.com/products')
+      .then(response => response.json())
+      .then(data => setProducts(data));
+  }, []);
 
   return (
     <>
@@ -98,12 +100,12 @@ const Results = () => {
       </center>
       <center>
         <Divider style={{ width: clamp("100%", "85%"), marginTop: "10px" }} />
-        <Grid container style={{ width: clamp("100%", "85%") }}>
+        <Grid container spacing={2} style={{ width: clamp("100%", "85%") }}>
           {clamp(
             <></>,
             <></>,
             filtersOpen && (
-              <Grid item xs={0} lg={filtersOpen ? 3 : 0}>
+              <Grid item xs={12} md={3}>
                 {[
                   "Ideal for",
                   "Occasion",
@@ -114,23 +116,22 @@ const Results = () => {
                   "Raw Materials",
                   "Pattern",
                 ].map((item, index) => (
-                  <>
+                  <div key={index}>
                     <FilterAccordion
-                      key={index}
                       title={item}
                       // @ts-ignore
                       items={["Item 1", "Item 2"]}
                     />
                     <Divider />
-                  </>
+                  </div>
                 ))}
               </Grid>
             )
           )}
-          <Grid container item xs={12} lg={filtersOpen ? 9 : 12}>
-            {Array.from({ length: 25 }, (_, i) => i).map((_, index) => (
-              <Grid item key={index}>
-                <ProductCard {...product} />
+          <Grid container item xs={12} md={filtersOpen ? 9 : 12} spacing={2}>
+            {products.map((product, index) => (
+              <Grid item key={index} xs={6} sm={4} md={3}>
+                <ProductCard image={product.image} title={product.title} />
               </Grid>
             ))}
           </Grid>

@@ -1,4 +1,4 @@
-import { FC, CSSProperties, ImgHTMLAttributes } from "react";
+import React, { CSSProperties, ImgHTMLAttributes, RefObject } from "react";
 
 export enum ImageType {
   WEBP = "image/webp",
@@ -7,26 +7,28 @@ export enum ImageType {
   SVG = "image/svg+xml",
 }
 
-interface ImageProps extends ImgHTMLAttributes<HTMLImageElement> {
+export interface ImageProps extends ImgHTMLAttributes<HTMLImageElement> {
   src: string;
   alt: string;
   type: ImageType;
   style?: CSSProperties;
   containerStyle?: CSSProperties;
+  ref?: RefObject<HTMLImageElement>; // Include ref in ImageProps
 }
 
-const Image: FC<ImageProps> = ({
+const Image: React.FC<ImageProps> = ({
   src,
   alt,
   type,
   style,
   containerStyle,
+  ref,
   ...props
 }) => {
   return (
     <picture style={containerStyle}>
       <source srcSet={src} type={type} />
-      <img src={src} alt={alt} style={style} {...props} />
+      <img src={src} alt={alt} style={style} ref={ref} {...props} />
     </picture>
   );
 };

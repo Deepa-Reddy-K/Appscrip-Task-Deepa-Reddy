@@ -40,7 +40,7 @@ const FilterAccordion = ({ title = "", items = [] }) => {
       >
         <Stack direction="column">
           <Typography>{title}</Typography>
-          <Typography style={{ color: "grey" }}>ALL</Typography>
+          <Typography style={{ color: "grey"}}>ALL</Typography>
         </Stack>
       </StyledAccordionSummary>
       <AccordionDetails>
